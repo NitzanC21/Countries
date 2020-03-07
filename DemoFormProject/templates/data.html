@@ -1,0 +1,22 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>Datasets</h2>
+
+<div class="row my-grid-borders">
+    <p> </p>
+</div>
+
+
+<div class="row my-grid-borders">
+    <div class="col-md-5 my-grid-borders"><a href="{{ url_for('countries') }}">Happiest Countrys Datasets</a></div>
+    <div class="col-md-5 my-grid-borders">
+        <p>Data set ranking the happiest countries in the world</p>
+    </div>
+    <p>This dataset is taken from <a href="https://www.kaggle.com/unsdsn/world-happiness#2019.csv">kaggle</a>.
+    The first report was published in 2012 and it has been updated 3 months ago.</p>
+</div>
+
+
+{% endblock %}

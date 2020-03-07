@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}.</h2>
+<h3>{{ message }}</h3>
+
+<div class="row my-grid-borders">
+    <p> </p>
+</div>
+<div class="row my-grid-borders">
+    <div class="col-md-2 my-grid-borders"><img class="contain" src={{ img_countries }} alt='Picture of countrys'></div>
+</div>
+<div class="row my-grid-borders">
+    <h2>Countrie's Dataset Fields</h2>
+</div>
+<div class="row my-grid-borders">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Field</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Overall rank</td>
+                <td>Position related to all countries</td>
+            </tr>
+            <tr>
+                <td>Country or region</td>
+                <td>Name and or region of country</td>
+            </tr>
+            <tr>
+                <td>Score</td>
+                <td>Total score</td>
+            </tr>
+            <tr>
+                <td>GDP per capita</td>
+                <td>GDP per person</td>
+            </tr>
+            <tr>
+                <td>Social support</td>
+                <td>Describes in number the amount of social support</td>
+            </tr>
+            <tr>
+                <td>Healthy life expectancy</td>
+                <td>average number of years that a newborn can expect to live in full health</td>
+            </tr>
+            <tr>
+                <td>Freedom to make life choices</td>
+                <td>National average of responses to the question: Are you satisfied or dissatisfied with your freedom to choose what you do with your life?</td>
+            </tr>
+            <tr>
+                <td>Generosity</td>
+                <td>Government generosity to citizens</td>
+            </tr>
+            <tr>
+                <td>Perceptions of corruption</td>
+                <td>How Citizens evaluate the level of corruption</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row my-grid-borders">
+    <div class="col-md-5 my-grid-borders">
+        <form method="post">
+            {{ form1.csrf_token }}
+            <input class="btn btn-success" type="submit" name="action" value="Expand">
+        </form>
+    </div>
+    <div class="col-md-5 my-grid-borders">
+        <form method="post">
+            {{ form2.csrf_token }}
+            <input class="btn btn-danger" type="submit" name="action" value="Collapse">
+        </form>
+    </div>
+</div>
+<div class="row my-grid-borders">
+    {{ raw_data_table | safe}}
+</div>
+
+{% endblock %}
