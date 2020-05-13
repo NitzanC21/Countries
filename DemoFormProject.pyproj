@@ -53,14 +53,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DemoFormProject\static\data\countries.csv" />
+    <Content Include="DemoFormProject\static\data\Cscore.csv" />
     <Content Include="DemoFormProject\static\data\users.csv" />
-    <Content Include="DemoFormProject\static\data\capitals.csv" />
     <Content Include="DemoFormProject\static\pics\countries.jpg" />
     <Content Include="DemoFormProject\static\pics\pic1.jpg" />
     <Content Include="DemoFormProject\templates\countries.html" />
     <Content Include="DemoFormProject\templates\register.html" />
     <Content Include="DemoFormProject\templates\login.html" />
-    <Content Include="DemoFormProject\templates\PictureAlbum.html" />
     <Content Include="DemoFormProject\templates\query.html" />
     <Content Include="DemoFormProject\templates\data.html" />
     <Content Include="DemoFormProject\static\content\bootstrap.css" />

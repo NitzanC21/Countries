@@ -2,17 +2,14 @@
 
 {% block content %}
 
-<h2>{{ title }}.</h2>
 <h3>{{ message }}</h3>
 
+
 <div class="row my-grid-borders">
-    <p> </p>
+    <div class="col-md-2 my-grid-borders"><img class="contain" src={{ img_countries }} alt='Picture of countries'></div>
 </div>
 <div class="row my-grid-borders">
-    <div class="col-md-2 my-grid-borders"><img class="contain" src={{ img_countries }} alt='Picture of countrys'></div>
-</div>
-<div class="row my-grid-borders">
-    <h2>Countrie's Dataset Fields</h2>
+    <h2>Countries' Dataset Fields</h2>
 </div>
 <div class="row my-grid-borders">
     <table class="table table-striped">

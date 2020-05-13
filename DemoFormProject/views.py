@@ -7,6 +7,9 @@ from flask import render_template
 from DemoFormProject import app
 from DemoFormProject.Models.LocalDatabaseRoutines import create_LocalDatabaseServiceRoutines
 
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from DemoFormProject.Models.Forms import plot_to_img
 
 from datetime import datetime
 from flask import render_template, redirect, request
@@ -41,6 +44,9 @@ from DemoFormProject.Models.QueryFormStructure import QueryFormStructure
 from DemoFormProject.Models.QueryFormStructure import LoginFormStructure 
 from DemoFormProject.Models.QueryFormStructure import UserRegistrationFormStructure 
 
+from DemoFormProject.Models.Forms import plot_to_img
+from DemoFormProject.Models.Forms import get_country_choices
+
 ###from DemoFormProject.Models.LocalDatabaseRoutines import IsUserExist, IsLoginGood, AddNewUser 
 
 db_Functions = create_LocalDatabaseServiceRoutines() 
@@ -66,13 +72,13 @@ def countries():
     """Renders the about page."""
     form1 = ExpandForm()
     form2 = CollapseForm()
-    # df = pd.read_csv(path.join(path.dirname(__file__), 'static\\data\\countries.csv'))
     df = pd.read_csv(path.join(path.dirname(__file__), 'static/data/countries.csv'))
     raw_data_table = ''
 
     if request.method == 'POST':
         if request.form['action'] == 'Expand' and form1.validate_on_submit():
             raw_data_table = df.to_html(classes = 'table table-hover')
+
         if request.form['action'] == 'Collapse' and form2.validate_on_submit():
             raw_data_table = ''
   
@@ -120,52 +126,47 @@ def about():
     )
 
 
-@app.route('/Album')
-def Album():
-    """Renders the about page."""
-    return render_template(
-        'PictureAlbum.html',
-        title='Pictures',
-        year=datetime.now().year,
-        message='Welcome to my picture album'
-    )
-
-
 @app.route('/Query', methods=['GET', 'POST'])
 def Query():
+        
+        form = QueryFormStructure(request.form) #פקודה האומרת לתוכנה לקבל מהמשתמש נתונים
+        chart = '' #מגדיר טבלה ריקה
 
-    Name = None
-    Country = ''
-    capital = ''
-    df = pd.read_csv(path.join(path.dirname(__file__), 'static\\Data\\capitals.csv'))
-    df = df.set_index('Country')
+        df = pd.read_csv(path.join(path.dirname(__file__), 'static/data/Cscore.csv')) # קורא את הקובץ עם הציון
+        form.Countries.choices = get_country_choices() #מגדיר לתוכנה אפשרויות למשתנים
+        country_list = form.Countries.data #נותן את הרשימה למשתמש
 
-    raw_data_table = df.to_html(classes = 'table table-hover')
+        
+        if (request.method == 'POST'):
+            df = df[['Country', 'Score']] #מוריד את כל שאר העמודות
+            #df = df.set_index('Country') #נותן אינדקס לעמודה
 
-    form = QueryFormStructure(request.form)
-     
-    if (request.method == 'POST' ):
-        name = form.name.data
-        Country = name
-        if (name in df.index):
-            capital = df.loc[name,'Capital']
-            raw_data_table = ""
-        else:
-            capital = name + ', no such country'
-        form.name.data = ''
+            for country in country_list:
+                Countries = form.Countries.data
+                df2 = df[df['Country'].isin (Countries)]
+                df2 = df2.set_index('Country')
+                #df[country] = df2['Score']
 
 
+            #יוצר גרף
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            df2.plot(ax = ax , kind = 'bar')
+            chart = plot_to_img(fig)
 
-    return render_template('Query.html', 
-            form = form, 
-            name = capital, 
-            Country = Country,
-            raw_data_table = raw_data_table,
-            title='Query by the user',
-            year=datetime.now().year,
-            message='This page will use the web forms to get user input'
-        )
 
+        
+        #מחזיר למשתמש גרף
+        return render_template(
+        'query.html', 
+         form = form,
+         chart = chart,
+         title='Query by the user',
+         year=datetime.now().year,
+         message='This page will use the web forms to get user input'
+                    )
+
+         
 # -------------------------------------------------------
 # Register new user page
 # -------------------------------------------------------
@@ -178,8 +179,8 @@ def Register():
             db_Functions.AddNewUser(form)
             db_table = ""
 
-            flash('Thanks for registering new user - '+ form.FirstName.data + " " + form.LastName.data )
-            # Here you should put what to do (or were to go) if registration was good
+            flash('Thank you for registering new user - '+ form.FirstName.data + " " + form.LastName.data )
+
         else:
             flash('Error: User with this Username already exist ! - '+ form.username.data)
             form = UserRegistrationFormStructure(request.form)
